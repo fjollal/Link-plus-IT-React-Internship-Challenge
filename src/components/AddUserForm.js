@@ -46,7 +46,6 @@ const AddUserForm = ({ onClose }) => {
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-    
    
     if (name.startsWith('address.')) {
       const field = name.split('.')[1];
@@ -54,7 +53,7 @@ const AddUserForm = ({ onClose }) => {
         ...prev,
         address: {
           ...prev.address,
-          [field]: value
+          [field]: value || ''
         }
       }));
     } else if (name.startsWith('address.geo.')) {
@@ -65,7 +64,7 @@ const AddUserForm = ({ onClose }) => {
           ...prev.address,
           geo: {
             ...prev.address.geo,
-            [field]: value
+            [field]: value || ''
           }
         }
       }));
@@ -75,13 +74,13 @@ const AddUserForm = ({ onClose }) => {
         ...prev,
         company: {
           ...prev.company,
-          [field]: value
+          [field]: value || ''
         }
       }));
     } else {
       setFormData(prev => ({
         ...prev,
-        [name]: value
+        [name]: value || ''
       }));
     }
     
@@ -94,85 +93,72 @@ const AddUserForm = ({ onClose }) => {
     }
   };
 
-  const validateForm = () => {
-    const newErrors = {};
-    
-    
-    if (!formData.name.trim()) {
-      newErrors.name = 'Name is required';
-    }
-    
-    if (!formData.username.trim()) {
-      newErrors.username = 'Username is required';
-    }
-    
-    if (!formData.email.trim()) {
-      newErrors.email = 'Email is required';
-    } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
-      newErrors.email = 'Email is invalid';
-    }
-    
-    if (!formData.phone.trim()) {
-      newErrors.phone = 'Phone is required';
-    }
-    
-    if (!formData.website.trim()) {
-      newErrors.website = 'Website is required';
-    }
-    
-   
-    if (!formData.address.street.trim()) {
-      newErrors['address.street'] = 'Street is required';
-    }
-    
-    if (!formData.address.city.trim()) {
-      newErrors['address.city'] = 'City is required';
-    }
-    
-    if (!formData.address.zipcode.trim()) {
-      newErrors['address.zipcode'] = 'Zipcode is required';
-    }
-    
- 
-    if (!formData.company.name.trim()) {
-      newErrors['company.name'] = 'Company name is required';
-    }
-    
-    setErrors(newErrors);
-    return Object.keys(newErrors).length === 0;
-  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     
-    if (!validateForm()) {
+  
+    const requiredFields = ['name', 'username', 'email', 'phone', 'website'];
+    const addressFields = ['street', 'city', 'zipcode'];
+    const companyFields = ['name'];
+    
+    const simpleErrors = {};
+    
+ 
+    requiredFields.forEach(field => {
+      const value = formData[field];
+      if (!value || !value.trim()) {
+        simpleErrors[field] = `${field} is required`;
+      }
+    });
+    
+    
+    addressFields.forEach(field => {
+      const value = formData.address?.[field];
+      if (!value || !value.trim()) {
+        simpleErrors[`address.${field}`] = `${field} is required`;
+      }
+    });
+    
+    
+    companyFields.forEach(field => {
+      const value = formData.company?.[field];
+      if (!value || !value.trim()) {
+        simpleErrors[`company.${field}`] = `${field} is required`;
+      }
+    });
+    
+    if (Object.keys(simpleErrors).length > 0) {
+      setErrors(simpleErrors);
       return;
     }
-    
     setIsSubmitting(true);
     
     try {
       const newUser = {
         id: Date.now(), 
-        name: formData.name.trim(),
-        username: formData.username.trim(),
-        email: formData.email.trim(),
-        phone: formData.phone.trim(),
-        website: formData.website.trim(),
+        name: (formData.name || '').trim(),
+        username: (formData.username || '').trim(),
+        email: (formData.email || '').trim(),
+        phone: (formData.phone || '').trim(),
+        website: (() => {
+          const website = (formData.website || '').trim();
+          return website.startsWith('http') ? website : `https://${website}`;
+        })(),
         address: {
-          street: formData.address.street.trim(),
-          suite: formData.address.suite.trim(),
-          city: formData.address.city.trim(),
-          zipcode: formData.address.zipcode.trim(),
+          street: (formData.address?.street || '').trim(),
+          suite: (formData.address?.suite || '').trim(),
+          city: (formData.address?.city || '').trim(),
+          zipcode: (formData.address?.zipcode || '').trim(),
           geo: {
-            lat: formData.address.geo.lat.trim(),
-            lng: formData.address.geo.lng.trim()
+            lat: (formData.address?.geo?.lat || '').trim(),
+            lng: (formData.address?.geo?.lng || '').trim()
           }
         },
         company: {
-          name: formData.company.name.trim(),
-          catchPhrase: formData.company.catchPhrase.trim(),
-          bs: formData.company.bs.trim()
+          name: (formData.company?.name || '').trim(),
+          catchPhrase: (formData.company?.catchPhrase || '').trim(),
+          bs: (formData.company?.bs || '').trim()
         }
       };
       
@@ -181,8 +167,6 @@ const AddUserForm = ({ onClose }) => {
         type: actions.ADD_USER,
         payload: newUser
       });
-      
-     
       onClose();
       
     
@@ -268,7 +252,7 @@ const AddUserForm = ({ onClose }) => {
                   type="text"
                   id="name"
                   name="name"
-                  value={formData.name}
+                  value={formData.name || ''}
                   onChange={handleInputChange}
                   className={errors.name ? 'error' : ''}
                   placeholder="Enter full name"
@@ -282,7 +266,7 @@ const AddUserForm = ({ onClose }) => {
                   type="text"
                   id="username"
                   name="username"
-                  value={formData.username}
+                  value={formData.username || ''}
                   onChange={handleInputChange}
                   className={errors.username ? 'error' : ''}
                   placeholder="Enter username"
@@ -298,7 +282,7 @@ const AddUserForm = ({ onClose }) => {
                   type="email"
                   id="email"
                   name="email"
-                  value={formData.email}
+                  value={formData.email || ''}
                   onChange={handleInputChange}
                   className={errors.email ? 'error' : ''}
                   placeholder="Enter email address"
@@ -312,7 +296,7 @@ const AddUserForm = ({ onClose }) => {
                   type="tel"
                   id="phone"
                   name="phone"
-                  value={formData.phone}
+                  value={formData.phone || ''}
                   onChange={handleInputChange}
                   className={errors.phone ? 'error' : ''}
                   placeholder="Enter phone number"
@@ -324,13 +308,13 @@ const AddUserForm = ({ onClose }) => {
             <div className="form-group">
               <label htmlFor="website">Website *</label>
               <input
-                type="url"
+                type="text"
                 id="website"
                 name="website"
-                value={formData.website}
+                  value={formData.website || ''}
                 onChange={handleInputChange}
                 className={errors.website ? 'error' : ''}
-                placeholder="https://example.com"
+                placeholder="example.com (https:// will be added automatically)"
               />
               {errors.website && <span className="error-message">{errors.website}</span>}
             </div>
@@ -345,7 +329,7 @@ const AddUserForm = ({ onClose }) => {
                 type="text"
                 id="address.street"
                 name="address.street"
-                value={formData.address.street}
+                value={formData.address?.street || ''}
                 onChange={handleInputChange}
                 className={errors['address.street'] ? 'error' : ''}
                 placeholder="Enter street address"
@@ -359,7 +343,7 @@ const AddUserForm = ({ onClose }) => {
                 type="text"
                 id="address.suite"
                 name="address.suite"
-                value={formData.address.suite}
+                value={formData.address?.suite || ''}
                 onChange={handleInputChange}
                 placeholder="Enter suite or apartment number"
               />
@@ -372,7 +356,7 @@ const AddUserForm = ({ onClose }) => {
                   type="text"
                   id="address.city"
                   name="address.city"
-                  value={formData.address.city}
+                  value={formData.address?.city || ''}
                   onChange={handleInputChange}
                   className={errors['address.city'] ? 'error' : ''}
                   placeholder="Enter city"
@@ -386,7 +370,7 @@ const AddUserForm = ({ onClose }) => {
                   type="text"
                   id="address.zipcode"
                   name="address.zipcode"
-                  value={formData.address.zipcode}
+                  value={formData.address?.zipcode || ''}
                   onChange={handleInputChange}
                   className={errors['address.zipcode'] ? 'error' : ''}
                   placeholder="Enter zipcode"
@@ -402,7 +386,7 @@ const AddUserForm = ({ onClose }) => {
                   type="text"
                   id="address.geo.lat"
                   name="address.geo.lat"
-                  value={formData.address.geo.lat}
+                  value={formData.address?.geo?.lat || ''}
                   onChange={handleInputChange}
                   placeholder="Enter latitude"
                 />
@@ -414,7 +398,7 @@ const AddUserForm = ({ onClose }) => {
                   type="text"
                   id="address.geo.lng"
                   name="address.geo.lng"
-                  value={formData.address.geo.lng}
+                  value={formData.address?.geo?.lng || ''}
                   onChange={handleInputChange}
                   placeholder="Enter longitude"
                 />
@@ -431,7 +415,7 @@ const AddUserForm = ({ onClose }) => {
                 type="text"
                 id="company.name"
                 name="company.name"
-                value={formData.company.name}
+                value={formData.company?.name || ''}
                 onChange={handleInputChange}
                 className={errors['company.name'] ? 'error' : ''}
                 placeholder="Enter company name"
@@ -445,7 +429,7 @@ const AddUserForm = ({ onClose }) => {
                 type="text"
                 id="company.catchPhrase"
                 name="company.catchPhrase"
-                value={formData.company.catchPhrase}
+                value={formData.company?.catchPhrase || ''}
                 onChange={handleInputChange}
                 placeholder="Enter company catchphrase"
               />
@@ -457,7 +441,7 @@ const AddUserForm = ({ onClose }) => {
                 type="text"
                 id="company.bs"
                 name="company.bs"
-                value={formData.company.bs}
+                value={formData.company?.bs || ''}
                 onChange={handleInputChange}
                 placeholder="Enter business description"
               />
