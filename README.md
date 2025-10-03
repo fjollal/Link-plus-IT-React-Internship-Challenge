@@ -131,3 +131,4 @@ The application is fully responsive and works on:
 - User authentication
 - Data persistence with local storage
 - Unit and integration tests# Linkplus-IT-React-Internship-Challenge
+# Linkplus-IT-React-Internship-Challenge
