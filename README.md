@@ -130,4 +130,4 @@ The application is fully responsive and works on:
 - Pagination for large user lists
 - User authentication
 - Data persistence with local storage
-- Unit and integration tests
+- Unit and integration tests# Linkplus-IT-React-Internship-Challenge
