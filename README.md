@@ -1,70 +1,133 @@
-# Getting Started with Create React App
+# LinkPlus - User Management App
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+A React application demonstrating components, state management, routing, forms, and data fetching. Built with modern React hooks and best practices.
+
+## Features
+
+### Core Features
+- **List Users**: Fetch and display users from JSONPlaceholder API
+- **Search**: Client-side search by name, email, or company
+- **User Details**: Navigate to detailed user information page
+- **Add User**: Form with validation to add new users locally
+- **Sorting**: Sort users by name, email, company, or ID
+
+### Technical Features
+- **React Hooks**: Uses useState, useEffect, useContext, and useRef
+- **Context API**: Global state management for users
+- **React Router**: Client-side routing between pages
+- **Form Validation**: Required field validation with error messages
+- **Responsive Design**: Mobile-friendly interface
+- **Loading States**: Proper loading and error handling
+
+## Tech Stack
+
+- **React 19.2.0** - UI library
+- **React Router DOM** - Client-side routing
+- **Axios** - HTTP client for API calls
+- **CSS3** - Styling with responsive design
+- **Context API** - State management
+
+## Project Structure
+
+```
+src/
+├── components/
+│   ├── UserList.js          # Main user listing component
+│   ├── UserList.css         # User list styles
+│   ├── UserCard.js          # Individual user card component
+│   ├── UserCard.css         # User card styles
+│   ├── UserDetails.js       # User details page component
+│   ├── UserDetails.css      # User details styles
+│   ├── AddUserForm.js       # Add user form component
+│   └── AddUserForm.css      # Add user form styles
+├── context/
+│   └── UserContext.js       # Global state management
+├── hooks/
+│   └── useUserData.js       # Custom hook for data fetching
+├── App.js                   # Main app component with routing
+├── App.css                  # Global styles
+└── index.js                 # App entry point
+```
+
+## Getting Started
+
+### Prerequisites
+- Node.js (v14 or higher)
+- npm or yarn
+
+### Installation
+
+1. Clone the repository
+2. Install dependencies:
+   ```bash
+   npm install
+   ```
+
+3. Start the development server:
+   ```bash
+   npm start
+   ```
+
+4. Open [http://localhost:3000](http://localhost:3000) to view the app
+
+## Usage
+
+### Viewing Users
+- The main page displays all users in a responsive grid
+- Each user card shows name, email, company, and website
+- Click "View Details" to see full user information
+
+### Searching Users
+- Use the search bar to filter users by name, email, or company
+- Search is case-insensitive and updates in real-time
+- Clear search to see all users again
+
+### Sorting Users
+- Use the dropdown to select sort criteria (name, email, company, ID)
+- Click the sort button to toggle between ascending/descending order
+
+### Adding Users
+- Click "Add New User" button to open the form
+- Fill in required fields (name and email)
+- Optional fields include username, phone, website, company, and address
+- Form includes validation with error messages
+- New users are added to the top of the list
+
+### User Details
+- Click any user card to view detailed information
+- Details page shows contact info, address, and company details
+- Use the back button to return to the user list
+
+## API Integration
+
+The app fetches user data from [JSONPlaceholder](https://jsonplaceholder.typicode.com/users), a fake REST API for testing and prototyping.
+
+## State Management
+
+The app uses React Context API for global state management:
+- User data storage and updates
+- Loading and error states
+- Actions for adding, updating, and deleting users
+
+## Responsive Design
+
+The application is fully responsive and works on:
+- Desktop computers
+- Tablets
+- Mobile phones
 
 ## Available Scripts
 
-In the project directory, you can run:
+- `npm start` - Runs the app in development mode
+- `npm test` - Launches the test runner
+- `npm run build` - Builds the app for production
+- `npm run eject` - Ejects from Create React App (one-way operation)
 
-### `npm start`
+## Future Enhancements
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
-
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
-
-### `npm test`
-
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
-
-### `npm run build`
-
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
-
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
-
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `npm run eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
-
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
-
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+- Redux integration for more complex state management
+- Update and delete user functionality
+- Pagination for large user lists
+- User authentication
+- Data persistence with local storage
+- Unit and integration tests
